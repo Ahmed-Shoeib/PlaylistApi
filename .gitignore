@@ -23,10 +23,11 @@ project.lock.json
 project.fragment.lock.json
 
 ## Environment / secrets
+## Environment / secrets
 .env
 *.env
 appsettings.Local.json
-appsettings.*.Development.json
+appsettings.Production.json
 secrets.json
 
 ## macOS
