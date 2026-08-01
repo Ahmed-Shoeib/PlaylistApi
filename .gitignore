@@ -1,0 +1,39 @@
+## .NET build artifacts
+bin/
+obj/
+out/
+
+## Visual Studio / Rider / VS Code
+.vs/
+.vscode/
+*.user
+*.suo
+.idea/
+
+## Test results
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+*.coveragexml
+
+## NuGet
+*.nupkg
+**/packages/
+project.lock.json
+project.fragment.lock.json
+
+## Environment / secrets
+.env
+*.env
+appsettings.Local.json
+appsettings.*.Development.json
+secrets.json
+
+## macOS
+.DS_Store
+
+## Windows
+Thumbs.db
+
+## Docker
+docker-compose.override.yml
