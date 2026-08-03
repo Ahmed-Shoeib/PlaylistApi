@@ -10,19 +10,27 @@ public class SongService : ISongService
     private readonly ISongRepository _songRepository;
     private readonly IPlaylistRepository _playlistRepository;
 
-    public SongService(ISongRepository songRepository, IPlaylistRepository playlistRepository)
+    public SongService(
+        ISongRepository songRepository,
+        IPlaylistRepository playlistRepository)
     {
         _songRepository = songRepository;
         _playlistRepository = playlistRepository;
     }
 
     public async Task<SongResponse> AddSongToPlaylistAsync(
-        int playlistId, CreateSongRequest request, CancellationToken cancellationToken)
+        int playlistId,
+        CreateSongRequest request,
+        CancellationToken cancellationToken)
     {
-        var playlistExists = await _playlistRepository.ExistsAsync(playlistId, cancellationToken);
+        var playlistExists = await _playlistRepository.ExistsAsync(
+            playlistId,
+            cancellationToken);
+
         if (!playlistExists)
         {
-            throw new NotFoundException($"Playlist with id {playlistId} was not found.");
+            throw new NotFoundException(
+                $"Playlist with id {playlistId} was not found.");
         }
 
         var song = new Song
@@ -36,9 +44,61 @@ public class SongService : ISongService
             UpdatedAt = DateTime.UtcNow
         };
 
-        var created = await _songRepository.AddAsync(song, cancellationToken);
+        var created = await _songRepository.AddAsync(
+            song,
+            cancellationToken);
 
         return MapToResponse(created);
+    }
+
+    public async Task<SongResponse> UpdateSongAsync(
+        int playlistId,
+        int songId,
+        UpdateSongRequest request,
+        CancellationToken cancellationToken)
+    {
+        var song = await _songRepository.GetByIdAsync(
+            songId,
+            playlistId,
+            cancellationToken);
+
+        if (song is null)
+        {
+            throw new NotFoundException(
+                $"Song with id {songId} was not found in playlist {playlistId}.");
+        }
+
+        song.Title = request.Title;
+        song.Artist = request.Artist;
+        song.Album = request.Album;
+        song.DurationInSeconds = request.DurationInSeconds;
+
+        await _songRepository.UpdateAsync(
+            song,
+            cancellationToken);
+
+        return MapToResponse(song);
+    }
+
+    public async Task DeleteSongAsync(
+        int playlistId,
+        int songId,
+        CancellationToken cancellationToken)
+    {
+        var song = await _songRepository.GetByIdAsync(
+            songId,
+            playlistId,
+            cancellationToken);
+
+        if (song is null)
+        {
+            throw new NotFoundException(
+                $"Song with id {songId} was not found in playlist {playlistId}.");
+        }
+
+        await _songRepository.DeleteAsync(
+            song,
+            cancellationToken);
     }
 
     private static SongResponse MapToResponse(Song song)
