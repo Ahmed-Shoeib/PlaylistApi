@@ -61,4 +61,34 @@ public class PlaylistsController : ControllerBase
         var result = await _playlistService.GetPlaylistByIdAsync(playlistId, cancellationToken);
         return Ok(result);
     }
+
+    /// <summary>
+    /// Updates an existing playlist's name and description.
+    /// </summary>
+    [HttpPut("api/playlists/{playlistId:int}")]
+    [ProducesResponseType(typeof(PlaylistResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<PlaylistResponse>> UpdatePlaylist(
+        int playlistId,
+        [FromBody] UpdatePlaylistRequest request,
+        CancellationToken cancellationToken)
+    {
+        var result = await _playlistService.UpdatePlaylistAsync(playlistId, request, cancellationToken);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Deletes a playlist and all of its songs.
+    /// </summary>
+    [HttpDelete("api/playlists/{playlistId:int}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeletePlaylist(
+        int playlistId,
+        CancellationToken cancellationToken)
+    {
+        await _playlistService.DeletePlaylistAsync(playlistId, cancellationToken);
+        return NoContent();
+    }
 }

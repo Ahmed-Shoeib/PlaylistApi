@@ -44,4 +44,22 @@ public class PlaylistRepository : IPlaylistRepository
             .AsNoTracking()
             .AnyAsync(p => p.Id == id, cancellationToken);
     }
+
+    public async Task<Playlist?> GetByIdAsync(int id, CancellationToken cancellationToken)
+    {
+        return await _context.Playlists
+            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+    }
+
+    public async Task UpdateAsync(Playlist playlist, CancellationToken cancellationToken)
+    {
+        playlist.UpdatedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task DeleteAsync(Playlist playlist, CancellationToken cancellationToken)
+    {
+        _context.Playlists.Remove(playlist);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
 }

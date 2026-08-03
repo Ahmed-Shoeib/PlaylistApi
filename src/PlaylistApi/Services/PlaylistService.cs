@@ -65,6 +65,35 @@ public class PlaylistService : IPlaylistService
         return MapToResponse(playlist);
     }
 
+    public async Task<PlaylistResponse> UpdatePlaylistAsync(
+        int playlistId, UpdatePlaylistRequest request, CancellationToken cancellationToken)
+    {
+        var playlist = await _playlistRepository.GetByIdAsync(playlistId, cancellationToken);
+        if (playlist is null)
+        {
+            throw new NotFoundException($"Playlist with id {playlistId} was not found.");
+        }
+
+        playlist.Name = request.Name;
+        playlist.Description = request.Description;
+
+        await _playlistRepository.UpdateAsync(playlist, cancellationToken);
+
+        var updated = await _playlistRepository.GetByIdWithSongsAsync(playlistId, cancellationToken);
+        return MapToResponse(updated!);
+    }
+
+    public async Task DeletePlaylistAsync(int playlistId, CancellationToken cancellationToken)
+    {
+        var playlist = await _playlistRepository.GetByIdAsync(playlistId, cancellationToken);
+        if (playlist is null)
+        {
+            throw new NotFoundException($"Playlist with id {playlistId} was not found.");
+        }
+
+        await _playlistRepository.DeleteAsync(playlist, cancellationToken);
+    }
+
     private static PlaylistResponse MapToResponse(Playlist playlist)
     {
         return new PlaylistResponse
