@@ -23,7 +23,9 @@ builder.Services.AddDbContext<PlaylistDbContext>(options =>
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPlaylistRepository, PlaylistRepository>();
+builder.Services.AddScoped<ISongRepository, SongRepository>();
 builder.Services.AddScoped<IPlaylistService, PlaylistService>();
+builder.Services.AddScoped<ISongService, SongService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
