@@ -34,3 +34,18 @@ Backend technical assessment — an ASP.NET Core Web API that allows users to cr
 - Possible future improvements
 - AI usage disclosure
 - Troubleshooting
+
+## Status
+
+🚧 Under active development. See commit history for progress.
+
+### Local database
+
+This project uses SQL Server via Docker Compose.
+
+```bash
+docker compose up -d
+dotnet ef database update --project src/PlaylistApi
+```
+
+See [docs/DATABASE.md](docs/DATABASE.md) for schema details and the ER diagram.
