@@ -72,7 +72,7 @@ Full schema, ER diagram, and verification steps are in [`docs/DATABASE.md`](docs
 Clone the repository:
 
 ```bash
-git clone <your-repo-url>
+git clone [<your-repo-url>](https://github.com/Ahmed-Shoeib/PlaylistApi.git)
 cd PlaylistApi
 ```
 
